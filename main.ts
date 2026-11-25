@@ -40,6 +40,14 @@ function assertValidLine(line: string): void {
   if (line.includes("\r") || line.includes("\n")) {
     throw new Error("Line must not contain CR or LF characters.");
   }
+  // Reject control characters (NUL–US, DEL) anywhere in the line.
+  if (/[\u0000-\u001F\u007F]/.test(line)) {
+    throw new Error("Line must not contain control characters.");
+  }
+  // Reject consecutive double spaces; words are single-space separated.
+  if (/  /.test(line)) {
+    throw new Error("Line must not contain consecutive double spaces.");
+  }
 }
 
 assertValidLine(LINE);
